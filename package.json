@@ -1,0 +1,24 @@
+{
+  "name": "pdc-api",
+  "version": "1.0.0",
+  "description": "Plandoc web API",
+  "scripts": {
+    "start": "node ./bin/www",
+    "debug": "DEBUG=* supervisor ./bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=6.11.2"
+  },
+  "author": "Eduardo Vieira <eduardofelipevieira@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "debug": "^3.0.1",
+    "express": "^4.15.4",
+    "firebase-admin": "^5.2.1",
+    "mongodb": "^2.2.31",
+    "mongoose": "^4.12.0",
+    "morgan": "^1.8.2"
+  }
+}
