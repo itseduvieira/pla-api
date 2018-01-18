@@ -6,13 +6,13 @@ const logger = require('morgan')
 const debug = require('debug')('pdc:server')
 const bodyParser = require('body-parser')
 const config = require('../config/constants')
-const admin = require('firebase-admin')
-const serviceAccount = require('../config/serviceAccountKey.json')
+//const admin = require('firebase-admin')
+//const serviceAccount = require('../config/serviceAccountKey.json')
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: config.firebase.database
-})
+//admin.initializeApp({
+//    credential: admin.credential.cert(serviceAccount),
+//    databaseURL: config.firebase.database
+//})
 
 app.use(logger('dev'))
 app.use(bodyParser.json({limit: '5mb'}))
@@ -32,6 +32,14 @@ let logIncomingRequest = (req, res, next) => {
 }
 
 app.use('/', [logIncomingRequest], api)
+
+app.use((req, res, next) => {
+    if (req.originalUrl === '/favicon.ico') {
+        res.status(204).json({nope: true})
+    } else {
+        next()
+    }
+})
 
 app.use((req, res, next) => {
     let err = new Error('Not Found')
@@ -65,7 +73,7 @@ app.use((err, req, res, next) => {
     res.json(msg)
 })
 
-const mongoose = require('mongoose')
+/*const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 const connection = mongoose.connect(config.database.url, {
     useMongoClient: true
@@ -73,6 +81,6 @@ const connection = mongoose.connect(config.database.url, {
     debug('MongoDB connected')
 }).catch(err => {
     debug('ERR: ' + JSON.stringify(err))
-})
+})*/
 
 module.exports = app

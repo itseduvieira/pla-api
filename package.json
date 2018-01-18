@@ -4,6 +4,7 @@
   "description": "Plandoc web API",
   "scripts": {
     "start": "node ./bin/www",
+    "debug-win": "set DEBUG=* & supervisor ./bin/www",
     "debug": "DEBUG=* supervisor ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
