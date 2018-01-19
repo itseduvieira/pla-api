@@ -2,13 +2,19 @@
 
 const express = require('express')
 const router = express.Router()
+const path = require('path')
+const fs = require('fs')
 
-var PdfPrinter = require('pdfmake/src/printer')
-var printer = new PdfPrinter()
+let fonts = {
+    Roboto: {
+        normal: path.join(__dirname, '../../../assets/fonts', '/Roboto-Regular.ttf')
+    }
+}
 
-//const Plane = require('../../model/report')
+let PdfPrinter = require('pdfmake/src/printer')
+let printer = new PdfPrinter(fonts)
 
-var data = {
+let data = {
     "number": "123",
     "seller": {
         "name": "Next Step Webs, Inc.",
@@ -26,25 +32,17 @@ var data = {
     }]
 }
 
-var fonts = {
-    Roboto: {
-        normal: './fonts/Roboto-Regular.ttf'
-    }
-}
-
 router.get('/report', (req, res) => {
-
-    var dd = {
+    let dd = {
         content: [
             'First paragraph',
             'Another paragraph'
         ]
-        }
-        var pdfDoc = printer.createPdfKitDocument(dd);
-        pdfDoc.pipe(fs.createWriteStream('basics.pdf')).on('finish',function(){
-            res.send(pdfDoc)
-        });
-        pdfDoc.end();
+    }
+    
+    let doc = printer.createPdfKitDocument(dd)
+    doc.pipe(res)
+    doc.end()
 })
 
 module.exports = router
