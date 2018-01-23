@@ -21,16 +21,17 @@ router.get('/report', (req, res) => {
         pageOrientation: 'landscape',
         pageMargins: [ 40, 60, 40, 60 ],
         content: [
-            'First paragraph',
-            'Another paragraph',
+            'Eduardo Vieira',
+            'Período: 01/01/2017 a 31/01/2017',
             {
                 table: {
                   headerRows: 1,
-                  widths: [ '*', '*', '*', '*' ],
+                  widths: [ '*', '*', '*', '*', '*' ],
                   body: [
-                    [ 'First', 'Second', 'Third', 'The last one' ],
-                    [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                    [ { text: 'Bold value', bold: true }, 'Val 2', 'Val 3', 'Val 4' ]
+                    [ { text: 'Local do Plantão', bold: true }, { text: 'Data de Entrada', bold: true }, { text: 'Data de Saída', bold: true }, { text: 'Total', bold: true }, { text: 'Valor', bold: true } ],
+                    [ 'Santa Casa  (São Paulo)', '23/01/2017 22:00', '24/01/2017 00:00', '2', 'R$1.000,00' ],
+                    [ 'Clínica Oftalmo', '23/01/2017 21:00', '24/01/2017 02:00', '5', 'R$5.000,00' ],
+                    [ 'Santa Casa  (Santos)', '23/01/2017 22:00', '24/01/2017 00:00', '2', 'R$5.000,00' ]
                   ]
                 }
             }
