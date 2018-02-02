@@ -21,7 +21,24 @@ router.post('/report', (req, res) => {
     console.log(JSON.stringify(body))
 
     let table = [
-        [ { text: 'Local do Plantão', bold: true }, { text: 'Data de Entrada', bold: true }, { text: 'Data de Saída', bold: true }, { text: 'Total', bold: true }, { text: 'Valor', bold: true } ]
+        [ 
+            { text: 'Local do Plantão', bold: true }, 
+            { text: 'Data de Entrada', bold: true }, 
+            { text: 'Data de Saída', bold: true }, 
+            { text: 'Total', bold: true }, 
+            { text: 'Valor', bold: true } 
+        ]
+    ]
+
+    let footer = [
+        [ 
+            { text: 'Total', bold: true },
+            { text: body.total, bold: true }
+        ],
+        [ 
+            { text: 'Total', bold: true },
+            { text: 'R$10000', bold: true }
+        ]
     ]
 
     body.data.forEach(line => {
@@ -33,13 +50,20 @@ router.post('/report', (req, res) => {
         pageOrientation: 'landscape',
         pageMargins: [ 40, 60, 40, 60 ],
         content: [
-            body.name,
+            { text: 'Resumo de Plantões', alignment: 'center', bold: true, fontSize: 22 },
+            { text: body.name, bold: true },
             `Período: ${body.startDate} a ${body.endDate}`,
             {
                 table: {
                   headerRows: 1,
                   widths: [ '*', '*', '*', '*', '*' ],
                   body: table
+                }
+            },
+            {
+                table: {
+                    widths: [ '*', '*'],
+                    body: footer
                 }
             }
         ]
