@@ -34,10 +34,6 @@ router.post('/report', (req, res) => {
         [ 
             { text: 'Total', bold: true },
             { text: body.total, bold: true }
-        ],
-        [ 
-            { text: 'Total', bold: true },
-            { text: 'R$10000', bold: true }
         ]
     ]
 
