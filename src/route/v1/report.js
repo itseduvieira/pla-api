@@ -75,4 +75,24 @@ router.post('/report', (req, res) => {
     doc.end()
 })
 
+function send() {
+    //sparkpost
+    //aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0
+    // curl -X POST \
+    // https://api.sparkpost.com/api/v1/transmissions \
+    // -H "Authorization: aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0" \
+    // -H "Content-Type: application/json" \
+    // -d '{
+    //     "options": {
+    //     "sandbox": true
+    //     },
+    //     "content": {
+    //     "from": "sandbox@sparkpostbox.com",
+    //     "subject": "Thundercats are GO!!!",
+    //     "text": "Sword of Omens, give me sight BEYOND sight"
+    //     },
+    //     "recipients": [{ "address": "suporte@plandoc.com.br" }]
+    // }'
+}
+
 module.exports = router
