@@ -4,6 +4,8 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const fs = require('fs')
+const SparkPost = require('sparkpost')
+const client = new SparkPost('aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0')
 
 let fonts = {
     Roboto: {
@@ -67,6 +69,7 @@ router.post('/report', (req, res) => {
     
     res.header("Content-Type", "application/pdf")
     let doc = printer.createPdfKitDocument(dd)
+    send()
     doc.pipe(res)
     doc.end()
 })
@@ -89,6 +92,28 @@ function send() {
     //     },
     //     "recipients": [{ "address": "suporte@plandoc.com.br" }]
     // }'
+
+    client.transmissions.send({
+        options: {
+          sandbox: true
+        },
+        content: {
+          from: 'testing@sparkpostbox.com',
+          subject: 'Hello, World!',
+          html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+        },
+        recipients: [
+          {address: 'eduardofelipevieira@gmail.com'}
+        ]
+      })
+      .then(data => {
+        console.log('Woohoo! You just sent your first mailing!')
+        console.log(data)
+      })
+      .catch(err => {
+        console.log('Whoops! Something went wrong')
+        console.log(err)
+      })
 }
 
 module.exports = router
