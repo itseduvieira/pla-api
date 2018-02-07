@@ -91,12 +91,13 @@ router.post('/report', (req, res) => {
     })
 
     doc.on('end', () => {
-        let result = Buffer.concat(chunks).toString('base64')
+        let result = Buffer.concat(chunks)
+        let encoded = result.toString('base64')
 
-        debug(result)
+        debug(encoded)
 
         if(body.send) {
-            send(body, result)
+            send(body, encoded)
         }
 
         res.writeHead(200, {
