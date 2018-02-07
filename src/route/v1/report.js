@@ -7,6 +7,8 @@ const fs = require('fs')
 const SparkPost = require('sparkpost')
 const client = new SparkPost('aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0')
 
+const debug = require('debug')('pdc:server')
+
 let fonts = {
     Roboto: {
         normal: path.join(__dirname, '../../../assets/fonts', '/Roboto-Regular.ttf'),
@@ -20,7 +22,7 @@ let printer = new PdfPrinter(fonts)
 router.post('/report', (req, res) => {
     let body = req.body
 
-    console.log(JSON.stringify(body))
+    debug(JSON.stringify(body))
 
     let table = [
         [ 
@@ -67,52 +69,72 @@ router.post('/report', (req, res) => {
         ]
     }
     
-    res.header("Content-Type", "application/pdf")
-    let doc = printer.createPdfKitDocument(dd)
-    send()
+    
+    /*
+    
+    if(body.send) {
+        doc.getBase64(function(encodedString) {
+            send(body, encodedString)
+        })
+    }
+    
     doc.pipe(res)
+    doc.end()*/
+
+
+    let chunks = []
+  
+    let doc = printer.createPdfKitDocument(dd)
+
+    doc.on('data', chunk => {
+        chunks.push(chunk)
+    })
+
+    doc.on('end', () => {
+        let result = Buffer.concat(chunks).toString('base64')
+
+        debug(result)
+
+        if(body.send) {
+            send(body, result)
+        }
+
+        res.writeHead(200, {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': 'attachment; filename="response.pdf"'
+        })
+
+        res.end(result)
+    })
+
     doc.end()
 })
 
-function send() {
-    //sparkpost
-    //aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0
-    // curl -X POST \
-    // https://api.sparkpost.com/api/v1/transmissions \
-    // -H "Authorization: aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0" \
-    // -H "Content-Type: application/json" \
-    // -d '{
-    //     "options": {
-    //     "sandbox": true
-    //     },
-    //     "content": {
-    //     "from": "sandbox@sparkpostbox.com",
-    //     "subject": "Thundercats are GO!!!",
-    //     "text": "Sword of Omens, give me sight BEYOND sight"
-    //     },
-    //     "recipients": [{ "address": "suporte@plandoc.com.br" }]
-    // }'
-
+function send(body, encoded) {
     client.transmissions.send({
-        options: {
-          sandbox: true
-        },
         content: {
-          from: 'testing@sparkpostbox.com',
-          subject: 'Hello, World!',
-          html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+            from: 'suporte@plandoc.com.br',
+            subject: `Plandoc | Relatório do período ${body.startDate} a ${body.endDate}`,
+            html:`<html><body><p>Olá, ${body.name}</p><p>Segue em anexo o relatório gerado.</p><p>Obrigado!</p></body></html>`,
+            attachments: [
+                {
+                    type: 'application/pdf',
+                    name: 'report.pdf',
+                    data: encoded
+                }
+            ]
         },
         recipients: [
-          {address: 'eduardofelipevieira@gmail.com'}
+          {address: body.email}
         ]
       })
       .then(data => {
-        console.log('Woohoo! You just sent your first mailing!')
-        console.log(data)
+        debug('Woohoo! You just sent your first mailing!')
+        debug(data)
       })
       .catch(err => {
-        console.log('Whoops! Something went wrong')
-        console.log(err)
+        debug('Whoops! Something went wrong')
+        debug(err)
       })
 }
 
