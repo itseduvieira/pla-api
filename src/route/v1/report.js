@@ -29,7 +29,7 @@ router.post('/report', (req, res) => {
             { text: 'Local do Plantão', bold: true }, 
             { text: 'Data de Entrada', bold: true }, 
             { text: 'Data de Saída', bold: true }, 
-            { text: 'Total', bold: true }, 
+            { text: 'Horas', bold: true }, 
             { text: 'Valor', bold: true } 
         ]
     ]
@@ -37,11 +37,15 @@ router.post('/report', (req, res) => {
     let footer = [
         [ 
             { text: 'Total', bold: true },
-            { text: body.total, bold: true }
+            { text: body.hours, alignment: 'right', bold: true },
+            { text: body.total, alignment: 'right', bold: true }
         ]
     ]
 
     body.data.forEach(line => {
+        line[3] = { text: line[3], alignment: 'right', bold: true }
+        line[4] = { text: line[4], alignment: 'right', bold: true }
+
         table.push(line)
     })
 
@@ -56,31 +60,18 @@ router.post('/report', (req, res) => {
             {
                 table: {
                   headerRows: 1,
-                  widths: [ '*', '*', '*', '*', '*' ],
+                  widths: [ '*', '*', '*', 60, 120 ],
                   body: table
                 }
             },
             {
                 table: {
-                    widths: [ '*', '*'],
+                    widths: [ '*', 60, 120 ],
                     body: footer
                 }
             }
         ]
     }
-    
-    
-    /*
-    
-    if(body.send) {
-        doc.getBase64(function(encodedString) {
-            send(body, encodedString)
-        })
-    }
-    
-    doc.pipe(res)
-    doc.end()*/
-
 
     let chunks = []
   
