@@ -43,8 +43,8 @@ router.post('/report', (req, res) => {
     ]
 
     body.data.forEach(line => {
-        line[3] = { text: line[3], alignment: 'right', bold: true }
-        line[4] = { text: line[4], alignment: 'right', bold: true }
+        line[3] = { text: line[3], alignment: 'right' }
+        line[4] = { text: line[4], alignment: 'right' }
 
         table.push(line)
     })
