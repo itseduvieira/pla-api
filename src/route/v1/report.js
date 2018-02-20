@@ -107,7 +107,13 @@ function send(body, encoded) {
         content: {
             from: 'suporte@plandoc.com.br',
             subject: `Plandoc | Relatório do período ${body.startDate} a ${body.endDate}`,
-            html:`<html><body><p>Olá, ${body.name}</p><p>Segue em anexo o relatório gerado.</p><p>Obrigado!</p></body></html>`,
+            html:`<html>
+                    <body>
+                      <p>Olá, ${body.name}</p>
+                      <p>Segue em anexo o relatório gerado.</p>
+                      <p>Obrigado!</p>
+                    </body>
+                  </html>`,
             attachments: [
                 {
                     type: 'application/pdf',

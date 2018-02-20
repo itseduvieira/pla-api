@@ -6,13 +6,13 @@ const logger = require('morgan')
 const debug = require('debug')('pdc:server')
 const bodyParser = require('body-parser')
 const config = require('../config/constants')
-//const admin = require('firebase-admin')
-//const serviceAccount = require('../config/serviceAccountKey.json')
+const admin = require('firebase-admin')
+const serviceAccount = require('../config/serviceAccountKey.json')
 
-//admin.initializeApp({
-//    credential: admin.credential.cert(serviceAccount),
-//    databaseURL: config.firebase.database
-//})
+admin.initializeApp({
+   credential: admin.credential.cert(serviceAccount),
+   databaseURL: config.firebase.database
+})
 
 app.use(logger('dev'))
 app.use(bodyParser.json({limit: '5mb'}))
@@ -47,20 +47,6 @@ app.use((req, res, next) => {
     next(err)
 })
 
-if (app.get('env') === 'development') {
-    app.use((err, req, res, next) => {
-        res.status(err.status || 500)
-
-        let msg = {
-            message: err.message,
-            error: err
-        }
-
-        debug('ERR: ' + err.message)
-        res.json(msg)
-    })
-}
-
 app.use((err, req, res, next) => {
     res.status(err.status || 500)
     
@@ -73,7 +59,7 @@ app.use((err, req, res, next) => {
     res.json(msg)
 })
 
-/*const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 const connection = mongoose.connect(config.database.url, {
     useMongoClient: true
@@ -81,6 +67,6 @@ const connection = mongoose.connect(config.database.url, {
     debug('MongoDB connected')
 }).catch(err => {
     debug('ERR: ' + JSON.stringify(err))
-})*/
+})
 
 module.exports = app

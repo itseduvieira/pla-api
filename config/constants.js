@@ -2,7 +2,7 @@
 
 module.exports = {
     database: {
-        url: 'mongodb://plandocdba:<pass>@<host>.mlab.com:13505/<database>?authSource=<database>'
+        url: 'mongodb://plandocdba:bar1306tolo@ds143738.mlab.com:43738/heroku_cwcqd368?authSource=heroku_cwcqd368'
     },
     jwt: {
         secret: '<secret>'
