@@ -9,7 +9,7 @@ router.get('/terms', (req, res) => {
     var stat = fs.statSync(file)
     res.setHeader('Content-Length', stat.size)
     res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader('Content-Disposition', 'filename=terms.pdf')
+    res.setHeader('Content-Disposition', 'attachment; filename=terms.pdf')
 
     stream.pipe(res)
 })
