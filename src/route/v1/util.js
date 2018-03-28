@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 
 router.get('/terms', (req, res) => {
-    const file = path.join(__dirname, '..', '..', '..', 'assets', 'docs', 'terms.pdf')
+    const file = path.join(__dirname, '../../../assets/docs', 'terms.pdf')
     const stream = fs.createReadStream(file)
     var stat = fs.statSync(file)
     res.setHeader('Content-Length', stat.size)
