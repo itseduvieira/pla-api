@@ -127,11 +127,9 @@ function send(body, encoded) {
         ]
       })
       .then(data => {
-        debug('Woohoo! You just sent your first mailing!')
         debug(data)
       })
       .catch(err => {
-        debug('Whoops! Something went wrong')
         debug(err)
       })
 }
