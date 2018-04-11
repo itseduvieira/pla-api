@@ -105,7 +105,7 @@ router.post('/report', (req, res) => {
 function send(body, encoded) {
     client.transmissions.send({
         content: {
-            from: 'suporte@plandoc.com.br',
+            from: 'Suporte Plandoc <suporte@plandoc.com.br>',
             subject: `Plandoc | Relatório do período ${body.startDate} a ${body.endDate}`,
             html:`<html>
                     <body>

@@ -21,7 +21,7 @@ router.post('/confirm', (req, res) => {
 
     client.transmissions.send({
         content: {
-            from: 'suporte@plandoc.com.br',
+            from: 'Suporte Plandoc <suporte@plandoc.com.br>',
             subject: `Plandoc | Confirme seu email`,
             html:`<html>
                     <body>
