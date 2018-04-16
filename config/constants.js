@@ -10,5 +10,8 @@ module.exports = {
     firebase: {
         database: 'https://plandoc-a13c7.firebaseio.com/',
         storage: 'plandoc-a13c7.appspot.com'
+    },
+    newrelic: {
+        key: '2dc71181001c17dc34c0a9a7b2c48ca5bb4ae0bf'
     }
 }
