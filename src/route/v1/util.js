@@ -22,8 +22,6 @@ router.get('/terms', (req, res) => {
 router.post('/confirm', (req, res) => {
     let body = req.body
 
-    const email = body.email
-
     debug(JSON.stringify(body))
 
     client.transmissions.send({
@@ -32,7 +30,7 @@ router.post('/confirm', (req, res) => {
             subject: 'Plandoc | Confirme seu email',
             html:`<html>
                     <body>
-                      <p>Olá, ${body.email}</p></br>
+                      <p>Olá, ${body.name}</p></br>
                       <p>Clique <a href="#">neste link</a> para confirmar seu email.</p></br>
                       <p>Obrigado!</p>
                     </body>
