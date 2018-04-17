@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const fs = require('fs')
+const debug = require('debug')
+const SparkPost = require('sparkpost')
+const client = new SparkPost('aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0')
 
 router.get('/terms', (req, res) => {
     const file = path.join(__dirname, '../../../assets/docs', 'terms.pdf')
@@ -30,9 +33,9 @@ router.post('/confirm', (req, res) => {
             subject: 'Plandoc | Confirme seu email',
             html:`<html>
                     <body>
-                      <p>Olá, ${body.name}</p></br>
-                      <p>Clique <a href="#">neste link</a> para confirmar seu email.</p></br>
-                      <p>Obrigado!</p>
+                      <p>Olá, ${body.name} e bem vindo à Plandoc :)</p></br></br>
+                      <p>Vimos aqui que você fez um cadastro e gostaríamos de te agradecer pela preferência.</p></br></br>Para completar o cadastro, por favor <a href="#">neste link</a> para confirmar seu email.</p></br></br>
+                      <p>Obrigado</p><p><b>Equipe Plandoc</b></p>
                     </body>
                   </html>`
         },
