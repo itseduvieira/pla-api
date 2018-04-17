@@ -109,8 +109,8 @@ function send(body, encoded) {
             subject: `Plandoc | Relatório do período ${body.startDate} a ${body.endDate}`,
             html:`<html>
                     <body>
-                      <p>Olá, ${body.name}</p>
-                      <p>Segue em anexo o relatório gerado.</p>
+                      <p>Olá, ${body.name}</p></br>
+                      <p>Segue em anexo o relatório gerado.</p></br>
                       <p>Obrigado!</p>
                     </body>
                   </html>`,

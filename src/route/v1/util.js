@@ -9,7 +9,12 @@ router.get('/terms', (req, res) => {
     var stat = fs.statSync(file)
     res.setHeader('Content-Length', stat.size)
     res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader('Content-Disposition', 'attachment; filename=terms.pdf')
+
+    if(req.headers['user-agent'].indexOf('iOS') > -1 || req.headers['user-agent'].indexOf('Android') > -1) {
+        res.setHeader('Content-Disposition', 'attachment; filename=terms.pdf')
+    } else {
+        res.setHeader('Content-Disposition', 'filename=terms.pdf')
+    }
 
     stream.pipe(res)
 })
@@ -17,16 +22,18 @@ router.get('/terms', (req, res) => {
 router.post('/confirm', (req, res) => {
     let body = req.body
 
+    const email = body.email
+
     debug(JSON.stringify(body))
 
     client.transmissions.send({
         content: {
             from: 'Suporte Plandoc <suporte@plandoc.com.br>',
-            subject: `Plandoc | Confirme seu email`,
+            subject: 'Plandoc | Confirme seu email',
             html:`<html>
                     <body>
-                      <p>Olá, ${body.name}</p>
-                      <p>Segue em anexo o relatório gerado.</p>
+                      <p>Olá, ${body.email}</p></br>
+                      <p>Clique <a href="#">neste link</a> para confirmar seu email.</p></br>
                       <p>Obrigado!</p>
                     </body>
                   </html>`
