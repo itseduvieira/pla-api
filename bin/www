@@ -2,6 +2,7 @@
 
 'use strict'
 
+require('newrelic')
 const app = require('../src/app')
 const debug = require('debug')('pdc:server')
 const http = require('http')
