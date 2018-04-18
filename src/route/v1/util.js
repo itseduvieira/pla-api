@@ -5,6 +5,7 @@ const fs = require('fs')
 const debug = require('debug')
 const crypto = require('crypto')
 const SparkPost = require('sparkpost')
+const admin = require('firebase-admin')
 const client = new SparkPost('aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0')
 
 const mongoose = require('mongoose')
@@ -39,11 +40,19 @@ router.get('/confirm', async (req, res) => {
     if(!req.query.code) {
         res.status(301).redirect('https://www.plandoc.com.br')
     } else {
-        const result = await Confirmation.update({ code: req.query.code }, { $set: { confirmed: true }})
+        const result = await Confirmation.findOneAndUpdate({ $and: [  
+            { code: req.query.code }, { confirmed: false } ] 
+        }, { $set: { confirmed: true } }, { new: true })
 
-        if(result.n <= 0) {
+        if(!result) {
             res.status(301).redirect('https://www.plandoc.com.br')
         } else {
+            const user = await admin.auth().getUserByEmail(result.email)
+
+            await admin.auth().updateUser(user.uid, {
+                emailVerified: true
+            })
+
             res.setHeader('Content-Type', 'text/html')
             res.status(200)
                 .send(`<html>
@@ -76,7 +85,12 @@ router.post('/confirm', async (req, res) => {
         confirmed: false
     })
 
-    await confirmation.save()
+    const result = await Confirmation.findOneAndUpdate({ email: body.email }, 
+        { $set: { code: code } }, { new: true })
+
+    if(!result) {
+        await confirmation.save()
+    }
 
     client.transmissions.send({
         content: {
