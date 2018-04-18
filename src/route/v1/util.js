@@ -44,18 +44,17 @@ router.post('/confirm', (req, res) => {
         ]
       })
       .then(data => {
-        debug(data)
-
         res.status(200)
-            .json(JSON.stringify({
+            .json({
                 message: 'OK'
-            }))
+            })
       })
       .catch(err => {
-        debug(err)
-
         res.status(500)
-            .json(JSON.stringify(err))
+            .json({
+                error: true,
+                message: err.message
+            })
       })
 })
 
