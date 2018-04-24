@@ -61,7 +61,7 @@ router.get('/confirm', async (req, res) => {
                             </head>
                         <body>
                             <h1>Teste</h1>
-                        </body
+                        </body>
                     </html>`)
         }
     }
