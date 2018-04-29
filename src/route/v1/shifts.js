@@ -11,18 +11,21 @@ router.get('/shifts', async (req, res) => {
 })
 
 router.get('/shifts/:id', async (req, res) => {
-    const shift = await Shift.find({ id: req.params.id })
+    const shift = await Shift.findOne({ id: req.params.id })
 
-    res.json(shift)
+    if(shift) {
+        res.json(shift)
+    } else {
+        res.status(404).json({
+            message: 'Id not found'
+        })
+    }
 })
 
 router.post('/shifts', async (req, res) => {
     if(!req.body.id || !req.body.title || !req.body.value || !req.body.date) {
         res.status(500).json({
-            message: 'Malformed body',
-            error: {
-                status: 500
-            }
+            message: 'Malformed body'
         })
     } else {
         let e = new Shift(req.body)
@@ -33,32 +36,38 @@ router.post('/shifts', async (req, res) => {
     }
 })
 
-router.put('/shifts', async (req, res) => {
-    if(!req.body.id && !req.body.title && !req.body.value && !req.body.date) {
+router.put('/shifts/:id', async (req, res) => {
+    if(!req.body.title && !req.body.value && !req.body.date) {
         res.status(500).json({
-            message: 'Malformed body',
-            error: {
-                status: 500
-            }
+            message: 'Malformed body'
         })
     } else {
-        await Shift.update({ id: req.body.id }, { $set: req.body })
+        const result = await Shift.update({ id: req.params.id }, { $set: req.body })
         
-        const shift = await Shift.find({ id: req.body.id })
+        if(result.n > 0) {
+            const shift = await Shift.findOne({ id: req.params.id })
 
-        res.json(shift)
+            res.json(shift)
+        } else {
+            res.status(404).json({
+                message: 'Id not found'
+            })
+        }
     }
 })
 
 router.delete('/shifts/:id', async (req, res) => {
-    await Shift.remove({ id: req.params.id })
+    const result = await Shift.remove({ id: req.params.id })
 
-    res.json({
-        message: 'Shift deleted',
-        success: {
-            status: 200
-        }
-    })
+    if(result.n > 0) {
+        res.json({
+            message: 'Shift deleted'
+        })
+    } else {
+        res.status(404).json({
+            message: 'Id not found'
+        })
+    }
 })
 
 module.exports = router

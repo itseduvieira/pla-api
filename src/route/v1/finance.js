@@ -11,18 +11,21 @@ router.get('/expenses', async (req, res) => {
 })
 
 router.get('/expenses/:id', async (req, res) => {
-    const expense = await Expense.find({ id: req.params.id })
+    const expense = await Expense.findOne({ id: req.params.id })
 
-    res.json(expense)
+    if(expense) {
+        res.json(expense)
+    } else {
+        res.status(404).json({
+            message: 'Id not found'
+        })
+    }
 })
 
 router.post('/expenses', async (req, res) => {
     if(!req.body.id || !req.body.title || !req.body.value || !req.body.date) {
         res.status(500).json({
-            message: 'Malformed body',
-            error: {
-                status: 500
-            }
+            message: 'Malformed body'
         })
     } else {
         let e = new Expense(req.body)
@@ -33,32 +36,38 @@ router.post('/expenses', async (req, res) => {
     }
 })
 
-router.put('/expenses', async (req, res) => {
-    if(!req.body.id && !req.body.title && !req.body.value && !req.body.date) {
+router.put('/expenses/:id', async (req, res) => {
+    if(!req.body.title && !req.body.value && !req.body.date) {
         res.status(500).json({
-            message: 'Malformed body',
-            error: {
-                status: 500
-            }
+            message: 'Malformed body'
         })
     } else {
-        await Expense.update({ id: req.body.id }, { $set: req.body })
+        const result = await Expense.update({ id: req.params.id }, { $set: req.body })
         
-        const expense = await Expense.find({ id: req.body.id })
+        if(result.n > 0) {
+            const expense = await Expense.findOne({ id: req.params.id })
 
-        res.json(expense)
+            res.json(expense)
+        } else {
+            res.status(404).json({
+                message: 'Id not found'
+            })
+        }
     }
 })
 
 router.delete('/expenses/:id', async (req, res) => {
-    await Expense.remove({ id: req.params.id })
+    const result = await Expense.remove({ id: req.params.id })
 
-    res.json({
-        message: 'Expense deleted',
-        success: {
-            status: 200
-        }
-    })
+    if(result.n > 0) {
+        res.json({
+            message: 'Expense deleted'
+        })
+    } else {
+        res.status(404).json({
+            message: 'Id not found'
+        })
+    }
 })
 
 module.exports = router
