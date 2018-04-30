@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 let Company = new Schema({
+    userId: String,
     id: String,
     type: String,
     name: String,
