@@ -40,13 +40,15 @@ router.get('/confirm', async (req, res) => {
     if(!req.query.code) {
         res.status(301).redirect('https://www.plandoc.com.br')
     } else {
-        const result = await Confirmation.findOneAndUpdate({ $and: [  
-            { code: req.query.code }, { confirmed: false } ] 
-        }, { $set: { confirmed: true } }, { new: true })
+        const result = await Confirmation.update({ $and: [  
+            { code: req.query.code }, 
+            { confirmed: false } ] 
+        }, 
+        { $set: { confirmed: true } })
 
-        if(!result) {
-            res.status(301).redirect('https://www.plandoc.com.br')
-        } else {
+        const c = await Confirmation.findOne({ code: req.query.code })
+
+        if(c.confirmed) {
             const user = await admin.auth().getUserByEmail(result.email)
 
             await admin.auth().updateUser(user.uid, {
@@ -65,6 +67,8 @@ router.get('/confirm', async (req, res) => {
                             <p><a href="http://www.plandoc.com.br">Voltar para Plandoc</a></p>
                         </body>
                     </html>`)
+        } else {
+            res.status(301).redirect('https://www.plandoc.com.br')
         }
     }
 })
@@ -100,8 +104,8 @@ router.post('/confirm', async (req, res) => {
             subject: 'Plandoc | Confirme seu email',
             html:`<html>
                     <body>
-                      <p>Olá, ${body.name} e bem vindo à Plandoc :)</p></br></br>
-                      <p>Vimos aqui que você fez um cadastro e gostaríamos de te agradecer pela preferência.</p></br></br>Para completar o cadastro, por favor clique <a href="http://localhost:3000/v1/confirm?code=${code}">aqui</a> para confirmar seu email.</p></br></br>
+                      <p>Olá, ${body.name} e bem vindo à Plandoc :)</p></br>
+                      <p>Vimos aqui que você fez um cadastro e gostaríamos de te agradecer pela preferência.</p></br>Para completar o cadastro, por favor clique <a href="http://api.plandoc.com.br/v1/confirm?code=${code}">aqui</a> para confirmar seu email.</p></br>
                       <p>Obrigado</p><p><b>Equipe Plandoc</b></p>
                     </body>
                   </html>`
