@@ -61,10 +61,10 @@ router.get('/confirm', async (req, res) => {
                             <head>
                                 <title>Plandoc | Email Confirmado</title>
                             </head>
-                        <body>
+                        <body style="margin:40px;font-family:sans-serif;text-align:center;">
                             <h1>Seu email foi confirmado :)</h1>
 
-                            <p><a href="http://www.plandoc.com.br">Voltar para Plandoc</a></p>
+                            <p><a style="font-size:small;" href="http://www.plandoc.com.br">Voltar para Plandoc</a></p>
                         </body>
                     </html>`)
         } else {
