@@ -94,7 +94,7 @@ router.post('/confirm', async (req, res) => {
     const result = await Confirmation.findOne({ email: body.email })
 
     if(result) {
-        await Confirmation.update({ email: body.email, code: code }, { $set: { code: code } })
+        await Confirmation.update({ email: body.email }, { $set: { code: code, timestamp: now, confirmed: false } })
     } else {
         await confirmation.save()
     }
