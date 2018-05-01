@@ -49,7 +49,7 @@ router.get('/confirm', async (req, res) => {
         const c = await Confirmation.findOne({ code: req.query.code })
 
         if(c.confirmed) {
-            const user = await admin.auth().getUserByEmail(result.email)
+            const user = await admin.auth().getUserByEmail(c.email)
 
             await admin.auth().updateUser(user.uid, {
                 emailVerified: true
