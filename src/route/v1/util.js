@@ -91,10 +91,11 @@ router.post('/confirm', async (req, res) => {
         confirmed: false
     })
 
-    const result = await Confirmation.findOneAndUpdate({ email: body.email }, 
-        { $set: { code: code } }, { new: true })
+    const result = await Confirmation.findOne({ email: body.email })
 
-    if(!result) {
+    if(result) {
+        await Confirmation.update({ email: body.email }, { $set: { code: code } })
+    } else {
         await confirmation.save()
     }
 
@@ -105,7 +106,7 @@ router.post('/confirm', async (req, res) => {
             html:`<html>
                     <body>
                       <p>Olá, ${body.name} e bem vindo à Plandoc :)</p></br>
-                      <p>Vimos aqui que você fez um cadastro e gostaríamos de te agradecer pela preferência.</p></br>Para completar o cadastro, por favor clique <a href="http://api.plandoc.com.br/v1/confirm?code=${code}">aqui</a> para confirmar seu email.</p></br>
+                      <p>Vimos aqui que você fez um cadastro e gostaríamos de te agradecer pela preferência.</p></br>Para completar o cadastro, por favor clique <a href="http://localhost:3000/v1/confirm?code=${code}">aqui</a> para confirmar seu email.</p></br>
                       <p>Obrigado</p><p><b>Equipe Plandoc</b></p>
                     </body>
                   </html>`
