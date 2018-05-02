@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-let Profile = new Schema({
+let Preferences = new Schema({
     userId: String,
     notificationIncome: Boolean,
     notificationShifts: Boolean,
@@ -11,4 +11,4 @@ let Profile = new Schema({
     goalActive: Boolean
 })
 
-module.exports = mongoose.model('Profile', Profile)
+module.exports = mongoose.model('Preferences', Preferences)

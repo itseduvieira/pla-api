@@ -2,13 +2,13 @@
 
 const express = require('express')
 const router = express.Router()
-const Profile = require('../../model/profile')
+const Preferences = require('../../model/preferences')
 
-router.get('/profile/:id', async (req, res) => {
-    const profile = await Profile.findOne({ userId: req.params.id })
+router.get('/preferences/:id', async (req, res) => {
+    const preferences = await Preferences.findOne({ userId: req.params.id })
 
-    if(profile) {
-        res.json(profile)
+    if(preferences) {
+        res.json(preferences)
     } else {
         res.status(404).json({
             message: 'Id not found'
@@ -16,20 +16,20 @@ router.get('/profile/:id', async (req, res) => {
     }
 })
 
-router.post('/profile', async (req, res) => {
+router.post('/preferences', async (req, res) => {
     if(!req.body.userId) {
         res.status(500).json({
             message: 'Malformed body'
         })
     } else {
-        const profile = await Profile.findOne({ userId: req.body.userId })
+        const preferences = await Preferences.findOne({ userId: req.body.userId })
 
-        if(profile) {
+        if(preferences) {
             res.status(500).json({
                 message: 'Id already exists'
             })
         } else {
-            let p = new Profile({
+            let p = new Preferences({
                 userId: req.body.userId,
                 notificationIncome: false,
                 notificationShifts: false,
@@ -44,18 +44,18 @@ router.post('/profile', async (req, res) => {
     }
 })
 
-router.put('/profile/:id', async (req, res) => {
+router.put('/preferences/:id', async (req, res) => {
     if(!req.body.notificationIncome && !req.body.notificationShifts && !req.body.goalActive && !req.body.goalValue) {
         res.status(500).json({
             message: 'Malformed body'
         })
     } else {
-        const result = await Profile.update({ userId: req.params.id }, { $set: req.body })
+        const result = await Preferences.update({ userId: req.params.id }, { $set: req.body })
         
         if(result.n > 0) {
-            const profile = await Profile.findOne({ userId: req.params.id })
+            const preferences = await Preferences.findOne({ userId: req.params.id })
 
-            res.json(profile)
+            res.json(preferences)
         } else {
             res.status(404).json({
                 message: 'Id not found'
