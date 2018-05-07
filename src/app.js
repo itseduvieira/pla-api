@@ -22,7 +22,7 @@ const api = require('./route/api')
 
 // app.use('/api', [logIncomingRequest, passport.authenticate('jwt', { session: false })], api)
 
-let logIncomingRequest = (req, res, next) => {
+const logIncomingRequest = (req, res, next) => {
     if (app.get('env') === 'development') {
         console.log('HEADER ' + JSON.stringify(req.headers) + 
             (req.method !== 'GET' ? '\nBODY ' + JSON.stringify(req.body) : ''))
@@ -31,7 +31,22 @@ let logIncomingRequest = (req, res, next) => {
     next()
 }
 
-app.use('/', [logIncomingRequest], api)
+const basicAuth = (req, res, next) => {
+    const auth = req.headers["authorization"]
+    const parts = auth.split(' ')
+
+    if(!auth && parts[0] !== 'Bearer' && req.url !== '/confirm') {
+        res.status(401).json({
+            message: "Unauthorized"
+        })
+    } else {
+        res.locals.userId = parts[1]
+
+        next()
+    }
+}
+
+app.use('/', [logIncomingRequest, basicAuth], api)
 
 app.use((req, res, next) => {
     if (req.originalUrl === '/favicon.ico') {
