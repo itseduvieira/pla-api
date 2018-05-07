@@ -57,9 +57,9 @@ router.put('/shifts/:id', async (req, res) => {
 })
 
 router.delete('/shifts/:id', async (req, res) => {
-    const result = await Shift.remove({ id: req.params.id })
+    const data = await Shift.remove({ id: req.params.id })
 
-    if(result.n > 0) {
+    if(data.result.n > 0) {
         res.json({
             message: 'Shift deleted'
         })

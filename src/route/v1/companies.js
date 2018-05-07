@@ -57,9 +57,9 @@ router.put('/companies/:id', async (req, res) => {
 })
 
 router.delete('/companies/:id', async (req, res) => {
-    const result = await Company.remove({ id: req.params.id })
+    const data = await Company.remove({ id: req.params.id })
 
-    if(result.n > 0) {
+    if(data.result.n > 0) {
         res.json({
             message: 'Company deleted'
         })
