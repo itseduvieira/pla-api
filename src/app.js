@@ -35,7 +35,8 @@ const basicAuth = (req, res, next) => {
     const auth = req.headers["authorization"]
     const parts = auth.split(' ')
 
-    if(!auth && parts[0] !== 'Bearer' && req.url !== '/confirm') {
+    //TODO: Remove report after app update
+    if(!auth && parts[0] !== 'Bearer' && req.url !== '/confirm' && req.url !== '/report') {
         res.status(401).json({
             message: "Unauthorized"
         })
