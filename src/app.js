@@ -36,7 +36,7 @@ const basicAuth = (req, res, next) => {
     const parts = auth.split(' ')
 
     //TODO: Remove report after app update
-    if(!auth && parts[0] !== 'Bearer' && req.url !== '/confirm' && req.url !== '/v1/report') {
+    if(req.url !== '/confirm' && req.url !== '/v1/report' && !auth && parts[0] !== 'Bearer') {
         res.status(401).json({
             message: "Unauthorized"
         })
