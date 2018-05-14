@@ -33,7 +33,7 @@ const logIncomingRequest = (req, res, next) => {
 
 const basicAuth = (req, res, next) => {
     const auth = req.headers["authorization"]
-    const parts = auth.split(' ')
+    const parts = auth ? auth.split(' ') : []
 
     //TODO: Remove report after app update
     if(req.url !== '/v1/confirm' && req.url !== '/v1/report' && !auth && parts[0] !== 'Bearer') {
