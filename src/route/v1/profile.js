@@ -12,4 +12,40 @@ router.get('/profile', async (req, res) => {
     res.json(profile)
 })
 
+router.post('/profile', async (req, res) => {
+    if(!req.body.crm || !req.body.uf || !req.body.graduationDate || 
+        !req.body.institution || !req.body.field) {
+        res.status(500).json({
+            message: 'Malformed body'
+        })
+    } else {
+        let e = new Profile(req.body)
+
+        await e.save()
+
+        res.json(e)
+    }
+})
+
+router.put('/profile', async (req, res) => {
+    if(!req.body.crm || !req.body.uf || !req.body.graduationDate || 
+        !req.body.institution || !req.body.field) {
+        res.status(500).json({
+            message: 'Malformed body'
+        })
+    } else {
+        const result = await Profile.update({ userId: res.locals.userId }, { $set: req.body })
+        
+        if(result.n > 0) {
+            const profile = await Shift.findOne({ userId: res.locals.userId })
+
+            res.json(profile)
+        } else {
+            res.status(404).json({
+                message: 'Id not found'
+            })
+        }
+    }
+})
+
 module.exports = router
