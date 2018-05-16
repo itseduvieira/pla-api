@@ -37,7 +37,7 @@ router.put('/profile', async (req, res) => {
         const result = await Profile.update({ userId: res.locals.userId }, { $set: req.body })
         
         if(result.n > 0) {
-            const profile = await Shift.findOne({ userId: res.locals.userId })
+            const profile = await Profile.findOne({ userId: res.locals.userId })
 
             res.json(profile)
         } else {
