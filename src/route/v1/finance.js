@@ -5,13 +5,16 @@ const router = express.Router()
 const Expense = require('../../model/expense')
 
 router.get('/expenses', async (req, res) => {
-    const expenses = await Expense.find()
+    const expenses = await Expense.find({ userId: res.locals.userId })
 
     res.json(expenses)
 })
 
 router.get('/expenses/:id', async (req, res) => {
-    const expense = await Expense.findOne({ id: req.params.id })
+    const expense = await Expense.findOne({ $and: [  
+        { id: req.params.id }, 
+        { userId: res.locals.userId } ]
+    })
 
     if(expense) {
         res.json(expense)
@@ -28,6 +31,8 @@ router.post('/expenses', async (req, res) => {
             message: 'Malformed body'
         })
     } else {
+        req.body.userId = user.locals.userId
+
         let e = new Expense(req.body)
 
         await e.save()
@@ -42,10 +47,16 @@ router.put('/expenses/:id', async (req, res) => {
             message: 'Malformed body'
         })
     } else {
-        const result = await Expense.update({ id: req.params.id }, { $set: req.body })
+        const result = await Expense.update({ $and: [  
+            { id: req.params.id }, 
+            { userId: res.locals.userId } ]
+        }, { $set: req.body })
         
         if(result.n > 0) {
-            const expense = await Expense.findOne({ id: req.params.id })
+            const expense = await Expense.findOne({ $and: [  
+                { id: req.params.id }, 
+                { userId: res.locals.userId } ]
+            })
 
             res.json(expense)
         } else {
@@ -57,7 +68,10 @@ router.put('/expenses/:id', async (req, res) => {
 })
 
 router.delete('/expenses/:id', async (req, res) => {
-    const data = await Expense.remove({ id: req.params.id })
+    const data = await Expense.remove({ $and: [  
+        { id: req.params.id }, 
+        { userId: res.locals.userId } ]
+    })
 
     if(data.result.n > 0) {
         res.json({
