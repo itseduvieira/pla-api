@@ -23,21 +23,28 @@ router.get('/shifts/:id', async (req, res) => {
 })
 
 router.post('/shifts', async (req, res) => {
-    if(!req.body.id || !req.body.title || !req.body.value || !req.body.date) {
+    if(!req.body.id || !req.body.companyId || !req.body.date || !req.body.paymentType || 
+        !req.body.shiftTime || !req.body.paymentDueDate || !req.body.salary) {
         res.status(500).json({
             message: 'Malformed body'
         })
     } else {
-        let e = new Shift(req.body)
+        let body = req.body
 
-        await e.save()
+        body.paid = false
 
-        res.json(e)
+        let s = new Shift(body)
+
+        await s.save()
+
+        res.json(s)
     }
 })
 
 router.put('/shifts/:id', async (req, res) => {
-    if(!req.body.title && !req.body.value && !req.body.date) {
+    if(!req.body.companyId && !req.body.date && !req.body.paymentType && 
+        !req.body.shiftTime && !req.body.paymentDueDate && !req.body.salary && 
+        !req.body.paid) {
         res.status(500).json({
             message: 'Malformed body'
         })
