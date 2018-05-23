@@ -85,7 +85,10 @@ router.delete('/expenses/:id', async (req, res) => {
 })
 
 router.delete('/expenses/group/:groupId', async (req, res) => {
-    const data = await Expense.remove({ groupId: req.params.groupId })
+    const data = await Expense.remove({ $and: [  
+        { groupId: req.params.groupId }, 
+        { userId: res.locals.userId } ]
+    })
 
     if(data.result.n > 0) {
         res.json({
