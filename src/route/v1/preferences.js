@@ -17,7 +17,7 @@ router.get('/preferences', async (req, res) => {
 })
 
 router.post('/preferences', async (req, res) => {
-    const preferences = await Preferences.findOne({ userId: user.locals.userId })
+    const preferences = await Preferences.findOne({ userId: res.locals.userId })
 
     if(preferences) {
         res.status(500).json({
@@ -25,7 +25,7 @@ router.post('/preferences', async (req, res) => {
         })
     } else {
         let p = new Preferences({
-            userId: req.body.userId,
+            userId: res.locals.userId,
             notificationIncome: false,
             notificationShifts: false,
             goalValue: 0,

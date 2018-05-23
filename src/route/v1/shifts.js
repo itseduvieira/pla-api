@@ -5,13 +5,16 @@ const router = express.Router()
 const Shift = require('../../model/shift')
 
 router.get('/shifts', async (req, res) => {
-    const shifts = await Shift.find()
+    const shifts = await Shift.find({ userId: res.locals.userId })
 
     res.json(shifts)
 })
 
 router.get('/shifts/:id', async (req, res) => {
-    const shift = await Shift.findOne({ id: req.params.id })
+    const shift = await Shift.findOne({ $and: [  
+        { id: req.params.id }, 
+        { userId: res.locals.userId } ]
+    })
 
     if(shift) {
         res.json(shift)
@@ -29,11 +32,10 @@ router.post('/shifts', async (req, res) => {
             message: 'Malformed body'
         })
     } else {
-        let body = req.body
+        req.body.userId = res.locals.userId
+        req.body.paid = false
 
-        body.paid = false
-
-        let s = new Shift(body)
+        let s = new Shift(req.body)
 
         await s.save()
 
@@ -49,10 +51,16 @@ router.put('/shifts/:id', async (req, res) => {
             message: 'Malformed body'
         })
     } else {
-        const result = await Shift.update({ id: req.params.id }, { $set: req.body })
+        const result = await Shift.update({ $and: [  
+            { id: req.params.id }, 
+            { userId: res.locals.userId } ]
+        }, { $set: req.body })
         
         if(result.n > 0) {
-            const shift = await Shift.findOne({ id: req.params.id })
+            const shift = await Shift.findOne({ $and: [  
+                { id: req.params.id }, 
+                { userId: res.locals.userId } ]
+            })
 
             res.json(shift)
         } else {
@@ -64,7 +72,10 @@ router.put('/shifts/:id', async (req, res) => {
 })
 
 router.delete('/shifts/:id', async (req, res) => {
-    const data = await Shift.remove({ id: req.params.id })
+    const data = await Shift.remove({ $and: [  
+        { id: req.params.id }, 
+        { userId: res.locals.userId } ]
+    })
 
     if(data.result.n > 0) {
         res.json({

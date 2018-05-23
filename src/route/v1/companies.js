@@ -5,13 +5,16 @@ const router = express.Router()
 const Company = require('../../model/company')
 
 router.get('/companies', async (req, res) => {
-    const companies = await Company.find()
+    const companies = await Company.find({ userId: res.locals.userId })
 
     res.json(companies)
 })
 
 router.get('/companies/:id', async (req, res) => {
-    const company = await Company.findOne({ id: req.params.id })
+    const company = await Company.findOne({ $and: [  
+        { id: req.params.id }, 
+        { userId: res.locals.userId } ]
+    })
 
     if(company) {
         res.json(company)
@@ -28,6 +31,8 @@ router.post('/companies', async (req, res) => {
             message: 'Malformed body'
         })
     } else {
+        req.body.userId = res.locals.userId
+
         let e = new Company(req.body)
 
         await e.save()
@@ -42,10 +47,16 @@ router.put('/companies/:id', async (req, res) => {
             message: 'Malformed body'
         })
     } else {
-        const result = await Company.update({ id: req.params.id }, { $set: req.body })
+        const result = await Company.update({ $and: [  
+            { id: req.params.id }, 
+            { userId: res.locals.userId } ]
+        }, { $set: req.body })
         
         if(result.n > 0) {
-            const company = await Company.findOne({ id: req.params.id })
+            const company = await Company.findOne({ $and: [  
+                { id: req.params.id }, 
+                { userId: res.locals.userId } ]
+            })
 
             res.json(company)
         } else {
@@ -57,7 +68,10 @@ router.put('/companies/:id', async (req, res) => {
 })
 
 router.delete('/companies/:id', async (req, res) => {
-    const data = await Company.remove({ id: req.params.id })
+    const data = await Company.remove({ $and: [  
+        { id: req.params.id }, 
+        { userId: res.locals.userId } ]
+    })
 
     if(data.result.n > 0) {
         res.json({

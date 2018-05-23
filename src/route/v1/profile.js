@@ -19,6 +19,8 @@ router.post('/profile', async (req, res) => {
             message: 'Malformed body'
         })
     } else {
+        req.body.userId = res.locals.userId
+        
         let e = new Profile(req.body)
 
         await e.save()
