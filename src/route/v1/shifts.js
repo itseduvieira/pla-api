@@ -77,4 +77,18 @@ router.delete('/shifts/:id', async (req, res) => {
     }
 })
 
+router.delete('/shifts/group/:groupId', async (req, res) => {
+    const data = await Expense.remove({ groupId: req.params.groupId })
+
+    if(data.result.n > 0) {
+        res.json({
+            message: 'Shifts deleted'
+        })
+    } else {
+        res.status(404).json({
+            message: 'GroupId not found'
+        })
+    }
+})
+
 module.exports = router
