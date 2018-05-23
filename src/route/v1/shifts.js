@@ -21,7 +21,7 @@ router.get('/shifts/:id', async (req, res) => {
     } else {
         res.status(404).json({
             message: 'Id not found'
-        })
+        }) 
     }
 })
 
