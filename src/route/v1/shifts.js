@@ -29,7 +29,8 @@ router.post('/shifts', async (req, res) => {
     if(!req.body.id || !req.body.companyId || !req.body.date || !req.body.paymentType || 
         !req.body.shiftTime || !req.body.paymentDueDate || !req.body.salary) {
         res.status(500).json({
-            message: 'Malformed body'
+            message: 'Malformed body',
+            body: req.body
         })
     } else {
         req.body.userId = res.locals.userId
