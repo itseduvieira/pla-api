@@ -26,7 +26,6 @@ router.get('/shifts/:id', async (req, res) => {
 })
 
 router.post('/shifts', async (req, res) => {
-    console.log(JSON.stringify(req.body))
     if(!req.body.id || !req.body.companyId || !req.body.date || !req.body.paymentType || 
         !req.body.shiftTime || !req.body.paymentDueDate || !req.body.salary) {
         res.status(500).json({
