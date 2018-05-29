@@ -8,6 +8,12 @@ const SparkPost = require('sparkpost')
 const admin = require('firebase-admin')
 const client = new SparkPost('aa1f1c693c80bde84af4cac8a49a53f4b0aa5fc0')
 
+const Preferences = require('../../model/preferences')
+const Profile = require('../../model/profile')
+const Company = require('../../model/company')
+const Shift = require('../../model/shift')
+const Expense = require('../../model/expense')
+
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
@@ -127,6 +133,18 @@ router.post('/confirm', async (req, res) => {
                 message: err.message
             })
       })
+})
+
+router.delete('/all', async (req, res) => {
+    await Preferences.remove({ userId: res.locals.userId } )
+    await Profile.remove({ userId: res.locals.userId } )
+    await Company.remove({ userId: res.locals.userId } )
+    await Shift.remove({ userId: res.locals.userId } )
+    await Expense.remove({ userId: res.locals.userId } )
+
+    res.status(200).json({
+        message: 'OK'
+    })
 })
 
 module.exports = router
