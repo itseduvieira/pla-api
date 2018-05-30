@@ -29,7 +29,8 @@ router.post('/preferences', async (req, res) => {
             notificationIncome: false,
             notificationShifts: false,
             goalValue: 0,
-            goalActive: false
+            goalActive: false,
+            online: false
         })
 
         await p.save()
@@ -39,7 +40,7 @@ router.post('/preferences', async (req, res) => {
 })
 
 router.put('/preferences', async (req, res) => {
-    if(!req.body.notificationIncome && !req.body.notificationShifts && !req.body.goalActive && !req.body.goalValue) {
+    if(!req.body.notificationIncome && !req.body.notificationShifts && !req.body.goalActive && !req.body.goalValue && !req.body.online) {
         res.status(500).json({
             message: 'Malformed body'
         })

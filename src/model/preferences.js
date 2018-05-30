@@ -8,7 +8,8 @@ let Preferences = new Schema({
     notificationIncome: Boolean,
     notificationShifts: Boolean,
     goalValue: Number,
-    goalActive: Boolean
+    goalActive: Boolean,
+    online: Boolean
 })
 
 module.exports = mongoose.model('Preferences', Preferences)
