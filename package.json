@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": ">=6.11.2"
+    "node": "8.7.0"
   },
   "author": "Eduardo Vieira <eduardofelipevieira@gmail.com>",
   "license": "ISC",
