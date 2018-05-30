@@ -31,7 +31,7 @@ router.post('/expenses', async (req, res) => {
             message: 'Malformed body'
         })
     } else {
-        req.body.userId = user.locals.userId
+        req.body.userId = res.locals.userId
 
         let e = new Expense(req.body)
 
