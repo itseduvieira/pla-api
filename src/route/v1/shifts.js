@@ -90,7 +90,7 @@ router.delete('/shifts/:id', async (req, res) => {
 })
 
 router.delete('/shifts/group/:groupId', async (req, res) => {
-    const data = await Expense.remove({ $and: [  
+    const data = await Shift.remove({ $and: [  
         { groupId: req.params.groupId }, 
         { userId: res.locals.userId } ]
     })
