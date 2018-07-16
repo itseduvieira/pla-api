@@ -7,17 +7,13 @@ const Preferences = require('../../model/preferences')
 router.get('/preferences', async (req, res) => {
     const preferences = await Preferences.findOne({ userId: res.locals.userId })
 
-    setTimeout(() => {
-        if(preferences) {
-            res.json(preferences)
-        } else {
-            res.status(404).json({
-                message: 'Id not found'
-            })
-        }
-    }, 10000)
-
-    
+    if(preferences) {
+        res.json(preferences)
+    } else {
+        res.status(404).json({
+            message: 'Id not found'
+        })
+    }
 })
 
 router.post('/preferences', async (req, res) => {
