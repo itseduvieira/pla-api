@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "debug-win": "set DEBUG=* & supervisor ./bin/www",
     "debug": "DEBUG=* supervisor ./bin/www",
-    "ping": "node worker.js"
+    "ping": "node ./src/worker.js"
   },
   "engines": {
     "node": "8.7.0",
