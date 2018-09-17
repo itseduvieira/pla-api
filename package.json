@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "debug-win": "set DEBUG=* & supervisor ./bin/www",
     "debug": "DEBUG=* supervisor ./bin/www",
-    "ping": "node ./src/worker.js"
+    "ping": "node ./src/workers/ping.js",
+    "notifications": "node ./src/workers/notifications.js"
   },
   "engines": {
     "node": "8.7.0",
@@ -18,7 +19,7 @@
     "body-parser": "^1.18.1",
     "debug": "^3.0.1",
     "express": "^4.15.4",
-    "firebase-admin": "^5.12.0",
+    "firebase-admin": "^6.0.0",
     "mongodb": "^2.2.31",
     "mongoose": "^4.12.0",
     "morgan": "^1.8.2",
