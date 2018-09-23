@@ -1,3 +1,3 @@
 web: npm start
-worker: npm run-script ping
-worker: npm run-script notifications
+ping: npm run-script ping
+notification: npm run-script notifications
