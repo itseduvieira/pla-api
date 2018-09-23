@@ -1,4 +1,4 @@
-image: node:6.11.2
+image: node:8.7.0
 clone:
   depth: full
 pipelines:
